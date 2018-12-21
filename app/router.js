@@ -65,6 +65,8 @@ export default Router.extend({
 		// i think this should be refactored out in original router
 		history.route(route, async function (fragment) {
 			
+			// initial route should be skiped because we already get content
+			// from the backend
 			if (!router.firstEntry) {
 				router.firstEntry = true;
 				return;
@@ -72,8 +74,12 @@ export default Router.extend({
 
 			var args = router._extractParameters(route, fragment);
 
+			// emulating fake request object
 			var req = createRequest({ route: originalRoute, args });			
 			
+			// our handler acts on both sides server and client
+			// should be async
+			// and should return populated view
 			const callbackResult = await router.execute(callback, [ req ], name);
 
 			if (callbackResult !== false) {
