@@ -16,7 +16,10 @@ _.each(routesTable.routes, (route) => {
 
 });
 
-
+/*
+* emulates request object
+* at this moment we need only named parameters from route
+*/
 function createRequest({ args = [], route = '' } = {}) {
 
 	const params = {};
