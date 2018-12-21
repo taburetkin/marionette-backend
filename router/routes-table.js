@@ -14,11 +14,10 @@ const fakeContacts = [
 module.exports = exports = {
 	
 	clientSide: true,
-	contentType: 'text/html',
 	dataType: 'view',
 
 	getDefaults(){
-		return _.pick(exports, 'clientSide', 'contentType', 'dataType');
+		return _.pick(exports, 'clientSide', 'dataType');
 	},
 
 	routes: [
@@ -57,7 +56,6 @@ module.exports = exports = {
 		{
 			method: 'get',
 			url: 'api/contacts',
-			contentType: 'application/json',
 			dataType: 'json',
 			clientSide: false,
 			async handler(){
@@ -67,7 +65,6 @@ module.exports = exports = {
 		{
 			method: 'get',
 			url: 'api/contacts/:id',
-			contentType: 'application/json',
 			dataType: 'json',
 			clientSide: false,
 			async handler(req){
