@@ -1,17 +1,40 @@
-require('../dom-shim');
+/*
+	this is base response view
+	returns complete dom document
+*/
+
+
 const _ = require('underscore');
 
-const View = require('backbone.marionette').View;
+const { View } = require('backbone.marionette');
+
+const documentTemplate = `
+<head>
+	<title>hello world</title>
+</head>
+<body>
+	<div id="application"></div>
+	<script src="/bndls/js/vendors.js"></script>
+	<script src="/bndls/js/app.js"></script>
+</body>`;
 
 const HtmlView = View.extend({
 	tagName: 'html',
 	docType: '<!DOCTYPE>',
-	template: _.template('<head></head><body></body>'),
+	template: _.noop,
 	regions:{
-		content:'body',
+		content:'#application',
+	},
+	onBeforeRender(){
+		// i think jsdom has some bug with html node
+		// at least there is only one way to not loose head and body tags
+		this.el.innerHTML = documentTemplate;
 	},
 	onRender(){
-		let view = this.getOption('content');
+		this.showContent();
+	},
+	showContent(view){
+		!view && (view = this.getOption('content'));
 		view && this.showChildView('content', view);
 	},
 	response(){
@@ -21,10 +44,9 @@ const HtmlView = View.extend({
 		return `${this.getOption('docType')}${this.el.outerHTML}`;
 	}
 }, {
-	render(req, res, content) {
+	response(req, content) {
 		let html = new HtmlView({ content });
-		html.render();
-		return res.send(html.response());
+		return html.response();
 	}
 });
 
